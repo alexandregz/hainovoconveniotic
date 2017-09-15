@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+  <title>Hai novo convenio TIC?</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+  <script>
+  function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+
+  // polo de agora so galego e castelam
+  var idioma = 'gz';
+  if(window.location.href.indexOf('haynuevoconveniotic') > 0) {
+    idioma = 'es';
+    document.title = "¿Hay nuevo convenio TIC?";
+  }
+
+
+  // por como fai dinahosting a redirection web, ao ir num frame, nom vale recolher o window.location
+  // emprego parametro "idioma=es"
+  // ripped from https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+  if(idioma == 'gz') {
+      idioma = getParameterByName('idioma');
+  }
+
+  if(idioma == null) idioma = 'gz';
+
+
+  // convenio TIC estado espanhol: 18 de março de 2009
+  var convenioTicDate = new Date(2009, 02, 19, 00, 00, 00, 00); // remember, month-1
+  var convenioTicTime = convenioTicDate.getTime();
+  
+  // data de diferéncia (quando se assine novo convenio)
+  var startDate = new Date(2009, 02, 19, 00, 00, 00, 00);
+  var startStamp = startDate.getTime();
+  
+  function updateClock() {
+      newDate = new Date();
+      newStamp = newDate.getTime();
+      var diff = Math.round((newStamp-startStamp)/1000);
+  
+      var diffCoConvenioTic = Math.round((newStamp-convenioTicTime)/1000);
+  
+      if(diff != diffCoConvenioTic) {
+          textoComOuSemConvenio = 'SI';   // si existe novo convénio
+      }
+      else {
+          textoComOuSemConvenio = 'NON';
+          if(idioma == 'es') textoComOuSemConvenio = 'NO';
+      }
+      document.getElementById('com-ou-sem-convenio').innerHTML = textoComOuSemConvenio;
+  
+  
+      // polo de agora a null...
+      var seculos = null;
+  
+      var anos = Math.floor(diff/(365*24*60*60));
+      diff = diff-(anos * (365*24*60*60));
+
+      var dias = Math.floor(diff/(24*60*60));
+      diff = diff-(dias * 24*60*60);
+  
+      var horas = Math.floor(diff/(60*60));
+      diff = diff-(horas * 60*60);
+  
+      var minutos = Math.floor(diff/(60));
+      diff = diff-(minutos * 60);
+  
+      var segundos = diff;
+      
+      
+      if(idioma == 'gz') {
+        document.getElementById("tempo-sem-convenio").innerHTML = anos + " ano(s), " + dias + " d&iacute;a(s), " + horas + " hora(s), " + minutos + " minuto(s), " + segundos + " segundo(s) desde &uacute;ltimo convenio TIC";
+      }
+      else{
+        document.getElementById("tempo-sem-convenio").innerHTML = anos + " a&ntilde;o(s), " + dias + " d&iacute;a(s), " + horas + " hora(s), " + minutos + " minuto(s), " + segundos + " segundo(s) desde &uacute;ltimo convenio TIC";
+      }
+  }
+  
+  setInterval(updateClock, 1000);
+  </script>
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="page-header">
+    <h1 id="com-ou-sem-convenio"></h1>      
+  </div>
+  <p id="tempo-sem-convenio"></p>      
+</div>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-102039108-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
